@@ -27,7 +27,7 @@ export class ReceiveService {
               {
                 type: 'document',
                 document: {
-                  link: `${baseUrl}/invoice/${receiveDto.file_name}`,
+                  link: `${baseUrl}/files/invoice/${receiveDto.file_name}`,
                   filename: receiveDto.file_name,
                 },
               },
