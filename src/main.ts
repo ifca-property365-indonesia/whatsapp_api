@@ -6,7 +6,13 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+
+const port = process.env.PORT ?? 5050;
+
 async function bootstrap() {
+
+  const port = 9456;
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const config = new DocumentBuilder()
@@ -21,6 +27,10 @@ async function bootstrap() {
   // Serve static files
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  await app.listen(9456);
-}
-bootstrap();
+  await app.listen(port);
+    console.log(`Server is running on port ${port}`);
+  }
+  bootstrap().catch((error) => {
+    console.error('Error starting server:', error);
+    process.exit(1);
+  });

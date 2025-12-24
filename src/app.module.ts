@@ -3,12 +3,14 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ReceiveModule } from './receive/receive.module';
+import { HomeModule } from './home/home.module';
 
 @Module({
   imports:[
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    HomeModule,
     ReceiveModule,
   ],
   controllers: [AppController],

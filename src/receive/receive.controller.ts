@@ -4,10 +4,10 @@ import { ReceiveDto } from './dto/receive.dto';
 
 @Controller('receive')
 export class ReceiveController {
-  constructor(private readonly receiveService: ReceiveService) {}
+  constructor(private readonly ReceiveService: ReceiveService) {}
 
   @Post()
-  create(@Body() receiveDto: ReceiveDto) {
-    return this.receiveService.dataReceive(receiveDto);
+  dataReceive(@Body() receiveDto: ReceiveDto) {
+    return this.ReceiveService.dataReceive(receiveDto);
   }
 }
