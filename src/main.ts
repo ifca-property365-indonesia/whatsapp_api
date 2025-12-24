@@ -21,6 +21,6 @@ async function bootstrap() {
   // Serve static files
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  await app.listen(6845);
+  await app.listen(9456);
 }
 bootstrap();
