@@ -210,9 +210,9 @@ export class ReceiveService {
     /* ===============================
     * 3. ALWAYS RETURN 200
     * =============================== */
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Worker processed',
-    };
+    // return {
+    //   statusCode: HttpStatus.OK,
+    //   message: 'Worker processed',
+    // };
   }
 }
