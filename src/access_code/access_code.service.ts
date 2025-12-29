@@ -34,7 +34,7 @@ export class AccessCodeService {
   ): Promise<{ message: string }> {
     const query = `
       INSERT INTO whatsapp_api
-      (unique_id, phone_number, file_location, debtor_name, debtor_month, created_at, updated_at)
+      (uniqueid, phone_number, file_location, debtor_name, debtor_month, createdAt, updatedAt)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
 
