@@ -4,10 +4,20 @@ import { ReceiveDto } from './dto/receive.dto';
 
 @Controller('receive')
 export class ReceiveController {
-  constructor(private readonly receiveService: ReceiveService) {}
+  constructor(private readonly ReceiveService: ReceiveService) {}
 
   @Post()
-  create(@Body() receiveDto: ReceiveDto) {
-    return this.receiveService.dataReceive(receiveDto);
+  dataReceive(@Body() receiveDto: ReceiveDto) {
+    return this.ReceiveService.dataReceive(receiveDto);
+  }
+
+  @Post('/webhooks')
+  async webhooks(@Body() data: Record<string, any>) {
+    return this.ReceiveService.webhooks(data);
+  }
+
+  @Post('/worker')
+  async worker(@Body() data: Record<string, any>) {
+    return this.ReceiveService.worker(data);
   }
 }
