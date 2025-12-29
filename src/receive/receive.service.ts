@@ -74,7 +74,24 @@ export class ReceiveService {
       ),
     );
 
-    // return response;
-    return response.data;
+    const apiResult = response.data;
+
+    return apiResult;
+
+    // //data yang saya dapa adalah begini 
+
+    // await this.accessCodeService.saveFirstMessagesLog({
+    //   uniqueId: apiResult.data.uniqueId,
+    //   phone_number: receiveDto.phone_number,
+    //   file_location: `${link}${receiveDto.file_name}`,
+    //   debtor_name: receiveDto.debtor_name,
+    //   debtor_month: receiveDto.debtor_month,
+    //   createdAt: apiResult.data.createdAt
+    //     ? new Date(apiResult.data.createdAt)
+    //     : new Date(),
+    //   updatedAt: apiResult.data.updatedAt
+    //     ? new Date(apiResult.data.updatedAt)
+    //     : new Date(),
+    // });
   }
 }
