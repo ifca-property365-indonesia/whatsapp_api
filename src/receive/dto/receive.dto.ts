@@ -7,7 +7,7 @@ export class ReceiveDto {
   @ApiProperty({ example: 'November 2025' })
   debtor_month: string;
 
-  @ApiProperty({ example: 'data_invoice.pdf' })
+  @ApiProperty({ example: '28-12-PM00000346-IV24040292.pdf' })
   file_name: string;
 
   @ApiProperty({ example: '6281295150532' })
