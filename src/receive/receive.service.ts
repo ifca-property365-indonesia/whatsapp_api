@@ -74,7 +74,7 @@ export class ReceiveService {
       ),
     );
 
-    return response;
-    // return response.data;
+    // return response;
+    return response.data;
   }
 }
