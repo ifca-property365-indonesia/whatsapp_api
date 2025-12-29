@@ -29,39 +29,44 @@ export class AccessCodeService {
     return result[0];
   }
 
-  async saveFirstMessagesLog( firstWhatsappApiLogDto: FirstWhatsappApiLogDto) {
+  async saveFirstMessagesLog(
+    dto: FirstWhatsappApiLogDto,
+  ): Promise<{ message: string }> {
     const query = `
       INSERT INTO whatsapp_api
-      (uniqueid, phone_number, file_location, debtor_name, debtor_month, createdAt, updatedAt)
+      (unique_id, phone_number, file_location, debtor_name, debtor_month, created_at, updated_at)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING id
     `;
 
     const parameter = [
-      firstWhatsappApiLogDto.uniqueId,
-      firstWhatsappApiLogDto.phone_number,
-      firstWhatsappApiLogDto.file_location,
-      firstWhatsappApiLogDto.debtor_name,
-      firstWhatsappApiLogDto.debtor_month,
-      firstWhatsappApiLogDto.createdAt ?? new Date(),
-      firstWhatsappApiLogDto.updatedAt ?? new Date(),
+      dto.uniqueId,
+      dto.phone_number,
+      dto.file_location,
+      dto.debtor_name,
+      dto.debtor_month,
+      dto.createdAt ?? new Date(),
+      dto.updatedAt ?? new Date(),
     ];
 
+    console.log('PARAMETER INSERT:', parameter);
+
     try {
-      const result = await this.postgresService.query(query, parameter);
+      await this.postgresService.query(query, parameter);
 
-      if (!result || result.length === 0) {
-        throw new InternalServerErrorException(
-          'Failed to insert whatsapp_api log',
-        );
-      }
-
-      return result[0]; // { id: number }
+      return {
+        message: 'Berhasil menyimpan whatsapp_api log',
+      };
     } catch (error) {
-      throw new InternalServerErrorException({
-        message: 'Error saving first whatsapp api log',
-        detail: error.message,
-      });
+      // 🔥 PENTING: log error ASLI
+      this.logger.error(
+        'Error saving first whatsapp api log',
+        error.stack ?? error.message,
+      );
+
+      // ❗ jangan throw kalau ini NON-BLOCKING
+      return {
+        message: 'Gagal menyimpan whatsapp_api log (logged)',
+      };
     }
   }
 
