@@ -10,4 +10,14 @@ export class ReceiveController {
   dataReceive(@Body() receiveDto: ReceiveDto) {
     return this.ReceiveService.dataReceive(receiveDto);
   }
+
+  @Post('/webhooks')
+  async webhooks(@Body() data: Record<string, any>) {
+    return this.ReceiveService.webhooks(data);
+  }
+
+  @Post('/worker')
+  async worker(@Body() data: Record<string, any>) {
+    return this.ReceiveService.worker(data);
+  }
 }
