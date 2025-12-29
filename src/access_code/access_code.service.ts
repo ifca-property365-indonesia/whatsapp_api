@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, Logger } from '@nestjs/common';
 import { PostgresService } from '../database/postgres.service';
 import { FirstWhatsappApiLogDto } from './dto/FirstWhatsappApiLog.dto';
 
 @Injectable()
 export class AccessCodeService {
+  private readonly logger = new Logger(AccessCodeService.name);
   constructor(
     private readonly postgresService: PostgresService,
   ) {}
@@ -28,21 +29,106 @@ export class AccessCodeService {
     return result[0];
   }
 
-  async saveFirstMessagesLog( FirstWhatsappApiLogDto: FirstWhatsappApiLogDto) {
-    const query = `Insert Into whatsapp_api (uniqueid, phone_number, file_location, debtor_name, debtor_month, createdAt, updatedAt)
-      Values ($1, $2, $3, $4, $5, $6, $7) returning id`;
+  async saveFirstMessagesLog( firstWhatsappApiLogDto: FirstWhatsappApiLogDto) {
+    const query = `
+      INSERT INTO whatsapp_api
+      (uniqueid, phone_number, file_location, debtor_name, debtor_month, createdAt, updatedAt)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING id
+    `;
 
     const parameter = [
-      FirstWhatsappApiLogDto.uniqueId,
-      FirstWhatsappApiLogDto.phone_number,
-      FirstWhatsappApiLogDto.file_location,
-      FirstWhatsappApiLogDto.debtor_name,
-      FirstWhatsappApiLogDto.debtor_month,
-      FirstWhatsappApiLogDto.createdAt,
-      FirstWhatsappApiLogDto.updatedAt,
+      firstWhatsappApiLogDto.uniqueId,
+      firstWhatsappApiLogDto.phone_number,
+      firstWhatsappApiLogDto.file_location,
+      firstWhatsappApiLogDto.debtor_name,
+      firstWhatsappApiLogDto.debtor_month,
+      firstWhatsappApiLogDto.createdAt ?? new Date(),
+      firstWhatsappApiLogDto.updatedAt ?? new Date(),
     ];
 
-    const result = await this.postgresService.query(query, parameter);
-    return result[0];
+    try {
+      const result = await this.postgresService.query(query, parameter);
+
+      if (!result || result.length === 0) {
+        throw new InternalServerErrorException(
+          'Failed to insert whatsapp_api log',
+        );
+      }
+
+      return result[0]; // { id: number }
+    } catch (error) {
+      throw new InternalServerErrorException({
+        message: 'Error saving first whatsapp api log',
+        detail: error.message,
+      });
+    }
+  }
+
+  async webhooksMessagesLog(uniqueId: string, whatsappId: string) {
+    const query = `
+      UPDATE whatsapp_api
+      SET whatsapp_id = $1, updatedAt = $2
+      WHERE uniqueid = $3
+      RETURNING id
+    `;
+
+    const parameter = [
+      whatsappId,
+      new Date(),
+      uniqueId,
+    ];
+
+    try {
+      const result = await this.postgresService.query(query, parameter);
+
+      if (!result || result.length === 0) {
+        return null; // ⬅️ JANGAN throw
+      }
+
+      return result[0]; // { id }
+    } catch (error) {
+      // log boleh, throw jangan
+      this.logger.error(
+        `DB error updating whatsapp_id (uniqueId=${uniqueId})`,
+        error.stack,
+      );
+
+      return null;
+    }
+  }
+
+  async workerMessagesLog(whatsappId: string, status: string, detailMessage: string) {
+    const query = `
+      UPDATE whatsapp_api
+      SET status = $1, json_data = $2, updatedAt = $3
+      WHERE whatsapp_id = $4
+      RETURNING id
+    `;
+
+    const parameter = [
+      status,
+      detailMessage,
+      new Date(),
+      whatsappId,
+    ];
+
+    try {
+      const result = await this.postgresService.query(query, parameter);
+
+      if (!result || result.length === 0) {
+        return null; // ⬅️ JANGAN throw
+      }
+
+      return result[0]; // { id }
+    } catch (error) {
+      // log boleh, throw jangan
+      this.logger.error(
+        `DB error updating worker messages log (whatsappId=${whatsappId})`,
+        error.stack,
+      );
+
+      return null;
+    }
   }
 }
