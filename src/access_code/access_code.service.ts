@@ -118,13 +118,14 @@ export class AccessCodeService {
       whatsappId,
     ];
 
+
     try {
       const result = await this.postgresService.query(query, parameter);
 
       if (!result || result.length === 0) {
         return null; // ⬅️ JANGAN throw
       }
-
+      
       return result[0]; // { id }
     } catch (error) {
       // log boleh, throw jangan

@@ -177,14 +177,11 @@ export class ReceiveService {
 
   async worker(data: Record<string, any>) {
     this.logger.log('Worker received', data);
-
     const whatsappId =
       data.payload.entry?.[0].changes?.[0].value.statuses?.[0].id || null;
     const status =
       data.payload.entry?.[0].changes?.[0].value.statuses?.[0].status || null;
-    const detailMessage =
-      data.payload.entry?.[0].changes?.[0].value.statuses?.[0].errors?.[0]
-        ?.message || null;
+    const detailMessage = data.payload || null;
 
     try {
       const result = await this.accessCodeService.workerMessagesLog(
