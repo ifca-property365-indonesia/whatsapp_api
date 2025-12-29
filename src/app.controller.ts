@@ -4,7 +4,7 @@ import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly AppService: AppService) {}
 
   @Get()
   @Redirect('/api-documentation', 302)

@@ -3,7 +3,7 @@ import { AccessCodeService } from './access_code.service';
 
 @Controller('access-code')
 export class AccessCodeController {
-  constructor(private readonly accessCodeService: AccessCodeService) {}
+  constructor(private readonly AccessCodeService: AccessCodeService) {}
 
 
 }

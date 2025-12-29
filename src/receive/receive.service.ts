@@ -25,8 +25,7 @@ export class ReceiveService {
     );
 
     const payload = {
-      channel: accessCodeData.code,
-      valid: accessCodeData.valid
+      client_secret: accessCodeData.client_secret,
     };
 
     return payload;

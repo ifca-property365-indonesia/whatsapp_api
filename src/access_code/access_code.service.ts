@@ -1,12 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { PostgresService } from "../database/postgres.service";
 
 @Injectable()
 export class AccessCodeService {
+  constructor(
+    private readonly PostgresService: PostgresService,
+  ) {}
+
   async findByCode(code: string) {
-    // contoh query DB (typeorm / prisma / raw)
-    return { 
-      code, 
-      valid: true 
-    };
+    const query = `
+    SELECT * FROM company_access WHERE code = $1`;
+    const result = await this.PostgresService.query(query, [code]);
+    if (result.length === 0) {
+      throw new NotFoundException('Access code not found');
+    }
+    return result[0];
   }
 }
