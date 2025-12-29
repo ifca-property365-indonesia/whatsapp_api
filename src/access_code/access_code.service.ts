@@ -34,8 +34,8 @@ export class AccessCodeService {
   ): Promise<{ message: string }> {
     const query = `
       INSERT INTO whatsapp_api
-      ("uniqueid", "phone_number", "file_location", "debtor_name", "debtor_month", "createdAt", "updatedAt")
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      ("uniqueid", "phone_number", "file_location", "debtor_name", "debtor_month", "createdAt", "updatedAt", "access_code")
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
 
     const parameter = [
@@ -46,6 +46,7 @@ export class AccessCodeService {
       dto.debtor_month,
       dto.createdAt ?? new Date(),
       dto.updatedAt ?? new Date(),
+      "GPPLAZA"
     ];
 
     console.log('PARAMETER INSERT:', parameter);
@@ -125,7 +126,7 @@ export class AccessCodeService {
       if (!result || result.length === 0) {
         return null; // ⬅️ JANGAN throw
       }
-      
+
       return result[0]; // { id }
     } catch (error) {
       // log boleh, throw jangan
