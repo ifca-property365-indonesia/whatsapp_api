@@ -10,9 +10,7 @@ export class AccessCodeService {
   async findByCode(code: string) {
     const query = `
       SELECT
-        access_code,
-        channel,
-        sender
+        *
       FROM company_access
       WHERE access_code = $1
       LIMIT 1
