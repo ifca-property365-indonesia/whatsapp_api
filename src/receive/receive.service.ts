@@ -43,7 +43,8 @@ export class ReceiveService {
               {
                 type: 'document',
                 document: {
-                  link: `${link}${receiveDto.file_name}`,
+                  // link: `${link}${receiveDto.file_name}`,
+                  link: 'asasdasd',
                   filename: receiveDto.file_name,
                 },
               },
