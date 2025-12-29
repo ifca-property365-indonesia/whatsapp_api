@@ -10,7 +10,7 @@ export class AccessCodeService {
   async findByCode(code: string) {
     const query = `
     SELECT * FROM company_access WHERE code = $1`;
-    const result = await this.PostgresService.query(query, [code]);
+    const result = await this.PostgresService.query(query);
     if (result.length === 0) {
       throw new NotFoundException('Access code not found');
     }
