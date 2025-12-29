@@ -8,8 +8,14 @@ export class ReceiveService {
   constructor(private readonly httpService: HttpService) {}
 
   async dataReceive(receiveDto: ReceiveDto) {
-    const baseUrl = process.env.APP_URL || 'http://localhost:6845';
+    let link = '';
 
+    if (receiveDto.environment === 'sandbox') {
+      link = 'https://cdnstg.property365.co.id:4422/gpuat/invoice/';
+    } else {
+      link = 'https://cdn.property365.co.id:4422/gplive/invoice/';
+    }
+    
     const payload = {
       channel: 'wa',
       sender: '6287853653777',
@@ -27,7 +33,7 @@ export class ReceiveService {
               {
                 type: 'document',
                 document: {
-                  link: `${baseUrl}/files/invoice/${receiveDto.file_name}`,
+                  link: `${link}${receiveDto.file_name}`,
                   filename: receiveDto.file_name,
                 },
               },

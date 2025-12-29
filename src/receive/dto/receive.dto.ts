@@ -12,4 +12,7 @@ export class ReceiveDto {
 
   @ApiProperty({ example: '6281295150532' })
   phone_number: string;
+
+  @ApiProperty({ example: 'sandbox' })
+  environment: string;
 }
