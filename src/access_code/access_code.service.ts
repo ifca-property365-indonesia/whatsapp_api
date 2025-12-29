@@ -34,7 +34,7 @@ export class AccessCodeService {
   ): Promise<{ message: string }> {
     const query = `
       INSERT INTO whatsapp_api
-      (uniqueid, phone_number, file_location, debtor_name, debtor_month, createdAt, updatedAt)
+      ("uniqueid", "phone_number", "file_location", "debtor_name", "debtor_month", "createdAt", "updatedAt")
       VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
 
@@ -73,8 +73,8 @@ export class AccessCodeService {
   async webhooksMessagesLog(uniqueId: string, whatsappId: string) {
     const query = `
       UPDATE whatsapp_api
-      SET whatsapp_id = $1, updatedAt = $2
-      WHERE uniqueid = $3
+      SET "whatsapp_id" = $1, "updatedAt" = $2
+      WHERE "uniqueid" = $3
       RETURNING id
     `;
 
@@ -106,8 +106,8 @@ export class AccessCodeService {
   async workerMessagesLog(whatsappId: string, status: string, detailMessage: string) {
     const query = `
       UPDATE whatsapp_api
-      SET status = $1, json_data = $2, updatedAt = $3
-      WHERE whatsapp_id = $4
+      SET "status" = $1, "json_data" = $2, "updatedAt" = $3
+      WHERE "whatsapp_id" = $4
       RETURNING id
     `;
 
