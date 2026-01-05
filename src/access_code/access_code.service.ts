@@ -103,7 +103,6 @@ export class AccessCodeService {
   async workerMessagesLog(
     whatsappId: string,
     status: string,
-    detailMessage: string,
   ) {
     const query = `
       UPDATE mgr.blast_wa_log_msg
@@ -116,7 +115,6 @@ export class AccessCodeService {
     try {
       const result = await this.MssqlService.query(query, {
         status,
-        detailMessage,
         whatsappId,
       });
 

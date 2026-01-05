@@ -184,13 +184,11 @@ export class ReceiveService {
       data.payload.entry?.[0].changes?.[0].value.statuses?.[0].id || null;
     const status =
       data.payload.entry?.[0].changes?.[0].value.statuses?.[0].status || null;
-    const detailMessage = data.payload || null;
 
     try {
       const result = await this.accessCodeService.workerMessagesLog(
         whatsappId,
-        status,
-        detailMessage
+        status
       );
 
       // executeRaw biasanya return number of affected rows
