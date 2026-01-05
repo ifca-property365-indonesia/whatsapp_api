@@ -118,6 +118,7 @@ export class ReceiveService {
     * =============================== */
     return {
       success: true,
+      statusCode: 200,
       message: 'WhatsApp message sent successfully to Provider',
       whatsapp: {
         uniqueId: apiResult.data.uniqueId,
