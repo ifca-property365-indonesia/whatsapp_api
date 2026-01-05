@@ -39,7 +39,7 @@ export class ReceiveService {
     /* ===============================
     * 3–4. SEND WA API
     * =============================== */
-  //  console.log('DATAreceiveDto:', receiveDto);
+    console.log('DATAreceiveDto:', receiveDto.wa_number);
     const payload = {
       channel: 'wa',
       sender: accessCodeData.sender,
