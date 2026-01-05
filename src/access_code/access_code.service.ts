@@ -75,7 +75,7 @@ export class AccessCodeService {
 
   async webhooksMessagesLog(uniqueId: string, whatsappId: string) {
     const query = `
-      UPDATE mgr.blast_wa_log_msg 
+      UPDATE mgr.ar_whatsapp_inv_log_msg 
       SET whatsapp_id = $1
       WHERE unique_id = $3
     `;
