@@ -71,6 +71,7 @@ export class ReceiveService {
         ],
       },
     };
+    console.log(receiveDto);
 
     const response = await firstValueFrom(
       this.httpService.post(
