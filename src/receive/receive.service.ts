@@ -23,7 +23,6 @@ export class ReceiveService {
   ) {}
 
   async dataReceive(receiveDto: ReceiveDto) {
-    console.log(receiveDto);
     /* ===============================
     * 1. SET LINK
     * =============================== */
@@ -40,6 +39,7 @@ export class ReceiveService {
     /* ===============================
     * 3–4. SEND WA API
     * =============================== */
+  //  console.log('DATAreceiveDto:', receiveDto);
     const payload = {
       channel: 'wa',
       sender: accessCodeData.sender,
@@ -71,7 +71,6 @@ export class ReceiveService {
         ],
       },
     };
-    console.log(receiveDto);
 
     const response = await firstValueFrom(
       this.httpService.post(
