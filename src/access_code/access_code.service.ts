@@ -105,7 +105,7 @@ export class AccessCodeService {
     status: string,
   ) {
     const query = `
-      UPDATE mgr.blast_wa_log_msg
+      UPDATE mgr.ar_whatsapp_inv_log_msg
       SET
         status_code = @status,
         audit_date = GETDATE()
