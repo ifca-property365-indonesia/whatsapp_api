@@ -23,6 +23,7 @@ export class ReceiveService {
   ) {}
 
   async dataReceive(receiveDto: ReceiveDto) {
+    console.log(receiveDto);
     /* ===============================
     * 1. SET LINK
     * =============================== */

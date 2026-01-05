@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, InternalServerErrorException, Logger } from '@nestjs/common';
 import { PostgresService } from '../database/postgres.service';
+import { MssqlService } from '../database/mssqlserver.service';
 import { FirstWhatsappApiLogDto } from './dto/FirstWhatsappApiLog.dto';
 
 @Injectable()
@@ -7,6 +8,7 @@ export class AccessCodeService {
   private readonly logger = new Logger(AccessCodeService.name);
   constructor(
     private readonly postgresService: PostgresService,
+    private readonly MssqlService: MssqlService,
   ) {}
 
   async findByCode(code: string) {
@@ -73,10 +75,9 @@ export class AccessCodeService {
 
   async webhooksMessagesLog(uniqueId: string, whatsappId: string) {
     const query = `
-      UPDATE whatsapp_api
-      SET "whatsapp_id" = $1, "updatedAt" = $2
-      WHERE "uniqueid" = $3
-      RETURNING id
+      UPDATE mgr.blast_wa_log_msg 
+      SET whatsapp_id = $1
+      WHERE unique_id = $3
     `;
 
     const parameter = [
@@ -86,7 +87,7 @@ export class AccessCodeService {
     ];
 
     try {
-      const result = await this.postgresService.query(query, parameter);
+      const result = await this.MssqlService.query(query, parameter);
 
       if (!result || result.length === 0) {
         return null; // ⬅️ JANGAN throw
@@ -106,10 +107,12 @@ export class AccessCodeService {
 
   async workerMessagesLog(whatsappId: string, status: string, detailMessage: string) {
     const query = `
-      UPDATE whatsapp_api
-      SET "status" = $1, "json_data" = $2, "updatedAt" = $3
-      WHERE "whatsapp_id" = $4
-      RETURNING id
+      UPDATE mgr.blast_wa_log_msg
+      SET
+        send_status = ${status},
+        detail_message = ${detailMessage},
+        updated_at = GETDATE()
+      WHERE whatsapp_id = ${whatsappId}
     `;
 
     const parameter = [
@@ -121,7 +124,7 @@ export class AccessCodeService {
 
 
     try {
-      const result = await this.postgresService.query(query, parameter);
+      const result = await this.MssqlService.query(query, parameter);
 
       if (!result || result.length === 0) {
         return null; // ⬅️ JANGAN throw
