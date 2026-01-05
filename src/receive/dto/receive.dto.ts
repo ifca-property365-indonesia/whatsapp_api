@@ -11,7 +11,7 @@ export class ReceiveDto {
   file_name: string;
 
   @ApiProperty({ example: '6281295150532' })
-  wa_number: string;
+  wa_no: string;
 
   @ApiProperty({ example: 'sandbox' })
   environment: string;

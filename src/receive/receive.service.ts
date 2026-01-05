@@ -40,11 +40,11 @@ export class ReceiveService {
     * 3–4. SEND WA API
     * =============================== */
     console.log('DATAreceiveDto:', receiveDto);
-    console.log('Wa:', receiveDto.wa_number);
+    console.log('Wa:', receiveDto.wa_no);
     const payload = {
       channel: 'wa',
       sender: accessCodeData.sender,
-      recipient: receiveDto.wa_number,
+      recipient: receiveDto.wa_no,
       type: 'template',
       template: {
         name: accessCodeData.template,
@@ -100,7 +100,7 @@ export class ReceiveService {
       () =>
         this.accessCodeService.saveFirstMessagesLog({
           uniqueId: apiResult.data.uniqueId,
-          phone_number: receiveDto.wa_number,
+          phone_number: receiveDto.wa_no,
           file_location: `${link}${receiveDto.file_name}`,
           debtor_name: receiveDto.debtor_name,
           debtor_month: receiveDto.debtor_month,
