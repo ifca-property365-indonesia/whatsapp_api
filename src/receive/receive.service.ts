@@ -43,7 +43,7 @@ export class ReceiveService {
     const payload = {
       channel: 'wa',
       sender: accessCodeData.sender,
-      recipient: receiveDto.phone_number,
+      recipient: receiveDto.wa_number,
       type: 'template',
       template: {
         name: accessCodeData.template,
@@ -99,7 +99,7 @@ export class ReceiveService {
       () =>
         this.accessCodeService.saveFirstMessagesLog({
           uniqueId: apiResult.data.uniqueId,
-          phone_number: receiveDto.phone_number,
+          phone_number: receiveDto.wa_number,
           file_location: `${link}${receiveDto.file_name}`,
           debtor_name: receiveDto.debtor_name,
           debtor_month: receiveDto.debtor_month,
