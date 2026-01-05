@@ -13,8 +13,8 @@ export class MssqlService implements OnModuleDestroy {
       server: process.env.DB_HOST_MS as string,
       port: Number(process.env.DB_PORT_MS),
       options: {
-        encrypt: process.env.DB_SSL_MS === 'true', // true untuk Azure
-        trustServerCertificate: false, // untuk local / self-signed
+        encrypt: process.env.DB_SSL_MS === 'true',
+        trustServerCertificate: false,
       },
       pool: {
         max: 10,
@@ -24,23 +24,28 @@ export class MssqlService implements OnModuleDestroy {
     };
 
     this.pool = new sql.ConnectionPool(config);
+
     this.pool.connect().catch(err => {
       console.error('MSSQL connection failed:', err);
     });
   }
 
-  async query<T = any>(sqlQuery: string, params?: any[]): Promise<T[]> {
+  /**
+   * Generic query with named parameters
+   */
+  async query<T = any>(
+    sqlQuery: string,
+    params?: Record<string, any>,
+  ): Promise<sql.IResult<T>> {
     const request = this.pool.request();
 
-    // bind parameter secara positional (@p0, @p1, ...)
-    if (params && params.length) {
-      params.forEach((value, index) => {
-        request.input(`p${index}`, value);
-      });
+    if (params) {
+      for (const [key, value] of Object.entries(params)) {
+        request.input(key, value);
+      }
     }
 
-    const result = await request.query(sqlQuery);
-    return result.recordset as T[];
+    return request.query<T>(sqlQuery);
   }
 
   async onModuleDestroy() {

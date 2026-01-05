@@ -75,69 +75,61 @@ export class AccessCodeService {
 
   async webhooksMessagesLog(uniqueId: string, whatsappId: string) {
     const query = `
-      UPDATE mgr.ar_whatsapp_inv_log_msg 
-      SET whatsapp_id = $1
-      WHERE unique_id = $3
+      UPDATE mgr.ar_whatsapp_inv_log_msg
+      SET whatsapp_id = @whatsappId
+      WHERE unique_id = @uniqueId
     `;
 
-    const parameter = [
-      whatsappId,
-      new Date(),
-      uniqueId,
-    ];
-
     try {
-      const result = await this.MssqlService.query(query, parameter);
+      const result = await this.MssqlService.query(query, {
+        whatsappId,
+        uniqueId,
+      });
 
-      if (!result || result.length === 0) {
-        return null; // ⬅️ JANGAN throw
+      if (result.rowsAffected[0] === 0) {
+        return null;
       }
 
-      return result[0]; // { id }
+      return true;
     } catch (error) {
-      // log boleh, throw jangan
       this.logger.error(
         `DB error updating whatsapp_id (uniqueId=${uniqueId})`,
         error.stack,
       );
-
       return null;
     }
   }
 
-  async workerMessagesLog(whatsappId: string, status: string, detailMessage: string) {
+  async workerMessagesLog(
+    whatsappId: string,
+    status: string,
+    detailMessage: string,
+  ) {
     const query = `
       UPDATE mgr.blast_wa_log_msg
       SET
-        send_status = ${status},
-        detail_message = ${detailMessage},
-        updated_at = GETDATE()
-      WHERE whatsapp_id = ${whatsappId}
+        status_code = @status,
+        audit_date = GETDATE()
+      WHERE whatsapp_id = @whatsappId
     `;
 
-    const parameter = [
-      status,
-      detailMessage,
-      new Date(),
-      whatsappId,
-    ];
-
-
     try {
-      const result = await this.MssqlService.query(query, parameter);
+      const result = await this.MssqlService.query(query, {
+        status,
+        detailMessage,
+        whatsappId,
+      });
 
-      if (!result || result.length === 0) {
-        return null; // ⬅️ JANGAN throw
+      if (result.rowsAffected[0] === 0) {
+        return null;
       }
 
-      return result[0]; // { id }
+      return true;
     } catch (error) {
-      // log boleh, throw jangan
       this.logger.error(
         `DB error updating worker messages log (whatsappId=${whatsappId})`,
         error.stack,
       );
-
       return null;
     }
   }
