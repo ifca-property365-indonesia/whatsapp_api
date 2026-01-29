@@ -6,7 +6,7 @@ import {
   BadGatewayException,
   HttpException,  HttpStatus,
 } from '@nestjs/common';
-import { ReminderDto } from './dto/reminder.dto';
+import { ReminderTwoDto } from './dto/reminder_two.dto';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { AccessCodeService } from '../access_code/access_code.service';
@@ -14,20 +14,20 @@ import { retry } from '../common/utils/retry.util';
 
 
 @Injectable()
-export class ReminderService {
-  private readonly logger = new Logger(ReminderService.name);
+export class ReminderTwoService {
+  private readonly logger = new Logger(ReminderTwoService.name);
 
   constructor(
     private readonly httpService: HttpService,
     private readonly accessCodeService: AccessCodeService,
   ) {}
 
-  async dataReminder(ReminderDto: ReminderDto) {
+  async dataReminder(ReminderTwoDto: ReminderTwoDto) {
     /* ===============================
     * 1. SET LINK
     * =============================== */
     const link =
-      ReminderDto.environment === 'sandbox'
+      ReminderTwoDto.environment === 'sandbox'
         ? 'https://cdnstg.property365.co.id:4422/gpuat/reminder/'
         : 'https://cdn.property365.co.id:4422/gplive/reminder/';
 
@@ -42,11 +42,25 @@ export class ReminderService {
     const payload = {
       channel: 'wa',
       sender: accessCodeData.sender,
-      recipient: ReminderDto.wa_no,
+      recipient: ReminderTwoDto.wa_no,
       type: 'template',
       template: {
-        name: 'reminder_1_file',
+        name: 'reminder_2',
         language: { code: 'id' },
+        components: [
+          {
+            type: 'header',
+            parameters: [
+              {
+                type: 'document',
+                document: {
+                  link: `${link}${ReminderTwoDto.file_name}`,
+                  filename: ReminderTwoDto.file_name,
+                },
+              },
+            ],
+          },
+        ],
       },
     };
 
@@ -84,9 +98,9 @@ export class ReminderService {
       () =>
         this.accessCodeService.saveFirstMessagesLog({
           uniqueId: apiResult.data.uniqueId,
-          phone_number: ReminderDto.wa_no,
-          file_location: `${link}${ReminderDto.file_name}`,
-          debtor_name: ReminderDto.due_no,
+          phone_number: ReminderTwoDto.wa_no,
+          file_location: `${link}${ReminderTwoDto.file_name}`,
+          debtor_name: ReminderTwoDto.due_no,
           debtor_month: debtorMonth,
         }),
       3,
