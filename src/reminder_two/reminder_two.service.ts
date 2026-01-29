@@ -47,20 +47,6 @@ export class ReminderTwoService {
       template: {
         name: 'reminder_2',
         language: { code: 'id' },
-        components: [
-          {
-            type: 'header',
-            parameters: [
-              {
-                type: 'document',
-                document: {
-                  link: `${link}${ReminderTwoDto.file_name}`,
-                  filename: ReminderTwoDto.file_name,
-                },
-              },
-            ],
-          },
-        ],
       },
     };
 

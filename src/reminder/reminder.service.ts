@@ -47,6 +47,20 @@ export class ReminderService {
       template: {
         name: 'reminder_1_file',
         language: { code: 'id' },
+        components: [
+          {
+            type: 'header',
+            parameters: [
+              {
+                type: 'document',
+                document: {
+                  link: `${link}${ReminderDto.file_name}`,
+                  filename: ReminderDto.file_name,
+                },
+              },
+            ],
+          },
+        ],
       },
     };
 
