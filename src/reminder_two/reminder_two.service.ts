@@ -45,8 +45,22 @@ export class ReminderTwoService {
       recipient: ReminderTwoDto.wa_no,
       type: 'template',
       template: {
-        name: 'reminder_2',
+        name: 'reminder_2_file',
         language: { code: 'id' },
+        components: [
+          {
+            type: 'header',
+            parameters: [
+              {
+                type: 'document',
+                document: {
+                  link: `${link}${ReminderTwoDto.file_name}`,
+                  filename: ReminderTwoDto.file_name,
+                },
+              },
+            ],
+          },
+        ],
       },
     };
 
