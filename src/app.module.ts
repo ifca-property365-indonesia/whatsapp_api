@@ -8,6 +8,7 @@ import { ReminderTwoModule } from './reminder_two/reminder_two.module';
 import { ReminderThreeModule } from './reminder_three/reminder_three.module';
 import { HomeModule } from './home/home.module';
 import { AccessCodeModule } from './access_code/access_code.module';
+import { DueReminderModule } from './due_reminder/due_reminder.module';
 
 @Module({
   imports:[
@@ -20,6 +21,7 @@ import { AccessCodeModule } from './access_code/access_code.module';
     ReminderTwoModule,
     ReminderThreeModule,
     AccessCodeModule,
+    DueReminderModule
   ],
   controllers: [AppController],
   providers: [AppService],
