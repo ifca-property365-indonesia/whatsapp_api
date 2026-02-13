@@ -45,7 +45,7 @@ export class DueReminderService {
       recipient: DueReminderDto.wa_no,
       type: 'template',
       template: {
-        name: 'reminder_due',
+        name: 'reminder_due_1',
         language: { code: 'id' },
       },
     };
